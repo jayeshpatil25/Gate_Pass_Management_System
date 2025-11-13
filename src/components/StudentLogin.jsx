@@ -10,7 +10,7 @@ function StudentLogin() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('https://gatepass-management-system-6obw.onrender.com/student/login', {
+      const response = await fetch('http://localhost:3000/student/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

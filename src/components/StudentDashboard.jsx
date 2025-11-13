@@ -20,7 +20,7 @@ function StudentDashboard() {
 
     setUsername(storedId);
 
-    fetch(`https://gatepass-management-system-6obw.onrender.com/student/requests`, {
+    fetch(`http://localhost:3000/student/requests`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`, // ✅ Only addition

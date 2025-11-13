@@ -26,7 +26,7 @@ const GatePassForm = () => {
 
     const fullData = { ...data, studentId };
 
-    const response = await fetch('https://gatepass-management-system-6obw.onrender.com/student/form', {
+    const response = await fetch('http://localhost:3000/student/form', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

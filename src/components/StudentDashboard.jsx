@@ -46,6 +46,33 @@ function StudentDashboard() {
     navigate('/student-login');
   };
 
+  // 🗑️ DELETE Feature — delete a request
+  const handleDelete = async (id) => {
+    const token = localStorage.getItem('studentToken');
+    if (!window.confirm('Are you sure you want to delete this gatepass request?')) return;
+
+    try {
+      const res = await fetch(`http://localhost:3000/student/requests/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert('Gatepass request deleted successfully.');
+        // Update frontend list
+        setGatepassRequests((prev) => prev.filter((req) => req._id !== id));
+      } else {
+        alert(data.error || 'Failed to delete request.');
+      }
+    } catch (err) {
+      console.error('Error deleting gatepass:', err);
+      alert('Server error while deleting.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-slate-100 to-blue-100 flex flex-col items-center justify-center p-6 font-sans">
       <motion.div
@@ -84,9 +111,9 @@ function StudentDashboard() {
             {gatepassRequests.length === 0 ? (
               <p className="text-gray-500">No gatepass requests found.</p>
             ) : (
-              gatepassRequests.map((request, index) => (
+              gatepassRequests.map((request) => (
                 <motion.div
-                  key={index}
+                  key={request._id}
                   className="p-4 bg-slate-50 rounded-lg shadow-md flex justify-between items-center"
                   whileHover={{ scale: 1.02 }}
                 >
@@ -99,17 +126,29 @@ function StudentDashboard() {
                     <p className="text-sm text-gray-500">Time: {request.time}</p>
                     <p className="text-sm text-gray-500">Luggages: {request.luggages}</p>
                   </div>
-                  <span
-                    className={`px-4 py-1 rounded-full text-sm font-semibold ${
-                      request.status === 'Approved'
-                        ? 'bg-green-100 text-green-700'
-                        : request.status === 'Rejected'
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}
-                  >
-                    {request.status}
-                  </span>
+
+                  <div className="flex items-center space-x-3">
+                    <span
+                      className={`px-4 py-1 rounded-full text-sm font-semibold ${
+                        request.status === 'Approved'
+                          ? 'bg-green-100 text-green-700'
+                          : request.status === 'Rejected'
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}
+                    >
+                      {request.status}
+                    </span>
+
+                    {/* 🗑️ Delete Button */}
+                    <button
+                      onClick={() => handleDelete(request._id)}
+                      className="text-red-600 hover:text-red-800 font-bold text-lg"
+                      title="Delete Request"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </motion.div>
               ))
             )}

@@ -128,6 +128,26 @@ router.get('/requests', async (req, res) => {
   }
 });
 
+// ✅ PROTECTED: Delete a Gatepass Request
+router.delete('/requests/:id', async (req, res) => {
+  const studentId = req.user.studentId; // from JWT
+  const { id } = req.params;
+
+  try {
+    const request = await GatePass.findOne({ _id: id, studentId });
+    if (!request) {
+      return res.status(404).json({ error: 'Request not found or unauthorized' });
+    }
+
+    await GatePass.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Gatepass request deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting request:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 
 export default router;

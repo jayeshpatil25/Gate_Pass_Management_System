@@ -76,13 +76,30 @@ const GatePassForm = () => {
           
           <div>
             <label className="block font-medium text-gray-700 mb-1">Hostel Block</label>
-            <input
-              type="text"
-              {...register('hostelBlock', { required: true })}
-              placeholder="Hostel Block Name"
-              className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-            />
-            {errors.hostelBlock && <p className="text-red-500 text-sm mt-1">Hostel Block is required</p>}
+           <select
+  {...register('hostelBlock', { required: true })}
+  className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-500"
+>
+  <option value="">Select Hostel Block</option>
+
+  <option value="HB1">HB1</option>
+  <option value="HB2">HB2</option>
+  <option value="HB3">HB3</option>
+  <option value="HB4">HB4</option>
+  <option value="HB5">HB5</option>
+  <option value="HB6">HB6</option>
+  <option value="HB7">HB7</option>
+  <option value="HB8">HB8</option>
+  <option value="HB9">HB9</option>
+  <option value="HB10">HB10</option>
+  <option value="GH1">GH1</option>
+  <option value="GH2">GH2</option>
+</select>
+
+{errors.hostelBlock && (
+  <p className="text-red-500 text-sm mt-1">Hostel Block is required</p>
+)}
+
           </div>
 
           <div>

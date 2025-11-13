@@ -23,7 +23,7 @@ function StudentDashboard() {
     fetch(`http://localhost:3000/student/requests`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${token}`, // ✅ Only addition
+        Authorization: `Bearer ${token}`,
       }
     })
       .then((res) => res.json())
@@ -38,15 +38,30 @@ function StudentDashboard() {
       });
   }, [navigate]);
 
+  // ✅ Logout Function
+  const handleLogout = () => {
+    localStorage.removeItem('studentId');
+    localStorage.removeItem('studentToken');
+    alert('You have been logged out.');
+    navigate('/student-login');
+  };
+
   return (
-    // Your original JSX layout — untouched
     <div className="min-h-screen bg-gradient-to-r from-slate-100 to-blue-100 flex flex-col items-center justify-center p-6 font-sans">
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-3xl text-center"
+        className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-3xl text-center relative"
       >
+        {/* ✅ Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Logout
+        </button>
+
         <h1 className="text-3xl font-extrabold text-blue-700 mb-2">
           Welcome, Student Id: {username}
         </h1>
@@ -76,7 +91,9 @@ function StudentDashboard() {
                   whileHover={{ scale: 1.02 }}
                 >
                   <div>
-                    <p className="font-medium">Request Date: {new Date(request.date).toLocaleDateString()}</p>
+                    <p className="font-medium">
+                      Request Date: {new Date(request.date).toLocaleDateString()}
+                    </p>
                     <p className="text-sm text-gray-500">Purpose: {request.purpose}</p>
                     <p className="text-sm text-gray-500">Destination: {request.destination}</p>
                     <p className="text-sm text-gray-500">Time: {request.time}</p>

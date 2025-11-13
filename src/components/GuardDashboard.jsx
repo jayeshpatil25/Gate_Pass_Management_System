@@ -8,7 +8,6 @@ const GuardDashboard = () => {
   const [requests, setRequests] = useState([]);
   const navigate = useNavigate();
 
-  // 🔐 Fetch all pending requests securely
   useEffect(() => {
     const fetchRequests = async () => {
       const token = localStorage.getItem('guardToken');
@@ -43,7 +42,15 @@ const GuardDashboard = () => {
     fetchRequests();
   }, [navigate]);
 
-  // 🔐 Approve gatepass
+  // ✅ Logout Function
+  const handleLogout = () => {
+    localStorage.removeItem('guardToken');
+    localStorage.removeItem('guardId');
+    alert('You have been logged out.');
+    navigate('/guard-login');
+  };
+
+  // ✅ Approve gatepass
   const handleApprove = async (requestId) => {
     const token = localStorage.getItem('guardToken');
 
@@ -73,7 +80,15 @@ const GuardDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 p-6 relative">
+      {/* ✅ Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="absolute top-6 right-6 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"
+      >
+        Logout
+      </button>
+
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

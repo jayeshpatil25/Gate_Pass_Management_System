@@ -1,10 +1,10 @@
+// AT THE VERY TOP - This loads .env variables before anything else
+import 'dotenv/config';
+
+// All other imports go AFTER
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-
-
-dotenv.config();
 
 import studentRoutes from '../routes/student.js';
 import guardRoutes from '../routes/guard.js';
@@ -22,18 +22,18 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    // Wait for all database connections
+    // Wait for all database connections (use 'connected' event to match DB modules)
     await Promise.all([
       new Promise((resolve, reject) => {
-        studentConnection.once('open', resolve);
+        studentConnection.once('connected', resolve);
         studentConnection.on('error', reject);
       }),
       new Promise((resolve, reject) => {
-        guardConnection.once('open', resolve);
+        guardConnection.once('connected', resolve);
         guardConnection.on('error', reject);
       }),
       new Promise((resolve, reject) => {
-        gatepassConnection.once('open', resolve);
+        gatepassConnection.once('connected', resolve);
         gatepassConnection.on('error', reject);
       }),
     ]);

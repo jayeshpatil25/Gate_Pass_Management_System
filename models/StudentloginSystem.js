@@ -5,7 +5,7 @@ const studentSchema = new mongoose.Schema({
   password: { type: String, required: true }
 });
 
-// Function to create the Student model with a given connection
+
 export default function getStudentModel(connection) {
   return connection.model('Student', studentSchema);
 }

@@ -42,15 +42,21 @@ const GuardDashboard = () => {
     fetchRequests();
   }, [navigate]);
 
-  // ✅ Logout Function
+  // Updated logout: set logoutMessage and redirect
   const handleLogout = () => {
+    const uname = localStorage.getItem("username") || localStorage.getItem("guardId");
+    if (uname) {
+      localStorage.setItem("logoutMessage", `Goodbye ${uname}!`);
+    }
+
     localStorage.removeItem('guardToken');
     localStorage.removeItem('guardId');
-    alert('You have been logged out.');
+    localStorage.removeItem('username');
+
     navigate('/guard-login');
   };
 
-  // ✅ Approve gatepass
+  // Approve function unchanged...
   const handleApprove = async (requestId) => {
     const token = localStorage.getItem('guardToken');
 
@@ -81,7 +87,6 @@ const GuardDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 p-6 relative">
-      {/* ✅ Logout Button */}
       <button
         onClick={handleLogout}
         className="absolute top-6 right-6 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"

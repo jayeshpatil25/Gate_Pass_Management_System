@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
@@ -7,6 +7,20 @@ import '../App.css';
 function GuardLogin() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+
+  const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  // Show "Goodbye" if set
+  useEffect(() => {
+    const msg = localStorage.getItem("logoutMessage");
+    if (msg) {
+      setSuccess(true);
+      setMessage(msg);
+      localStorage.removeItem("logoutMessage");
+      setTimeout(() => setMessage(""), 2000);
+    }
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -19,23 +33,42 @@ function GuardLogin() {
       const result = await response.json();
 
       if (response.ok) {
-        // ✅ Save token and guardId
+        // Save token and id + username
         localStorage.setItem('guardToken', result.token);
         localStorage.setItem('guardId', data.guardId);
-        
-        console.log("Login successful:", result);
-        navigate('/guard-dashboard'); 
+        localStorage.setItem('username', data.guardId);
+
+        setSuccess(true);
+        setMessage(`Hello ${data.guardId}!`);
+
+        setTimeout(() => {
+          setMessage("");
+          navigate('/guard-dashboard');
+        }, 1800);
       } else {
-        alert(result.error || 'Login failed');
+        setSuccess(false);
+        setMessage(result.error || 'Login failed');
+        setTimeout(() => setMessage(""), 2200);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert("Something went wrong. Try again.");
+      setSuccess(false);
+      setMessage("Something went wrong. Try again.");
+      setTimeout(() => setMessage(""), 2200);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+      {message && (
+        <div
+          className={`fixed left-1/2 transform -translate-x-1/2 top-8 px-6 py-3 rounded-xl shadow-lg text-white text-lg font-semibold animate-fade-in z-50
+            ${success ? "bg-green-600" : "bg-red-600"}`}
+        >
+          {message}
+        </div>
+      )}
+
       <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center text-green-600">Guard Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

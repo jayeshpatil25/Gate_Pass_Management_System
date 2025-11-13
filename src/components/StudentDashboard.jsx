@@ -15,7 +15,7 @@ function StudentDashboard() {
 
     if (!storedId || !token) {
       alert("You are not logged in. Please login again.");
-      return navigate('/');
+      return navigate('/student-login');
     }
 
     setUsername(storedId);
@@ -34,15 +34,21 @@ function StudentDashboard() {
       .catch((err) => {
         console.error('Error fetching gatepass requests:', err);
         alert("Something went wrong or your session expired. Please login again.");
-        navigate('/');
+        navigate('/student-login');
       });
   }, [navigate]);
 
-  // ✅ Logout Function
+  // Updated logout: set logoutMessage then clear credentials and redirect
   const handleLogout = () => {
+    const uname = localStorage.getItem("username") || localStorage.getItem("studentId");
+    if (uname) {
+      localStorage.setItem("logoutMessage", `Goodbye ${uname}!`);
+    }
+
     localStorage.removeItem('studentId');
     localStorage.removeItem('studentToken');
-    alert('You have been logged out.');
+    localStorage.removeItem('username');
+
     navigate('/student-login');
   };
 
@@ -54,7 +60,7 @@ function StudentDashboard() {
         transition={{ duration: 0.6 }}
         className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-3xl text-center relative"
       >
-        {/* ✅ Logout Button */}
+        {/* Logout Button */}
         <button
           onClick={handleLogout}
           className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"

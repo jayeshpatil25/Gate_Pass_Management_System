@@ -7,24 +7,21 @@ import '../App.css';
 function GuardLogin() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
-
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // 🌟 listen for message event
+  // listen for logout-event (Goodbye)
   useEffect(() => {
-    const handleShowMessage = (e) => {
-      setSuccess(e.detail.success);
-      setMessage(e.detail.text);
+    const handleLogoutEvent = (e) => {
+      const name = e.detail.username;
+      setSuccess(true);
+      setMessage(`Goodbye ${name}!`);
       setTimeout(() => setMessage(""), 2000);
     };
-
-    window.addEventListener("show-message", handleShowMessage);
-    return () => window.removeEventListener("show-message", handleShowMessage);
+    window.addEventListener("logout-event", handleLogoutEvent);
+    return () => window.removeEventListener("logout-event", handleLogoutEvent);
   }, []);
 
-
-  // ⭐ Guard Login Handler (Hello <guardId>)
   const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:3000/guards/login', {
@@ -32,100 +29,52 @@ function GuardLogin() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-
       const result = await response.json();
-
       if (response.ok) {
-        // Save guard details
+        const uname = data.guardId;
+        localStorage.setItem('guardId', uname);
         localStorage.setItem('guardToken', result.token);
-        localStorage.setItem('guardId', data.guardId);
-        localStorage.setItem('username', data.guardId);
+        localStorage.setItem('username', uname);
 
-        // ⭐ Show Hello message
+        // dispatch login-event for dashboard
+        window.dispatchEvent(new CustomEvent('login-event', { detail: { username: uname } }));
+
         setSuccess(true);
-        setMessage(`Hello ${data.guardId}!`);
-
+        setMessage(`Hello ${uname}!`);
         setTimeout(() => {
           setMessage("");
           navigate('/guard-dashboard');
-        }, 1800);
-
+        }, 1200);
       } else {
         setSuccess(false);
         setMessage(result.error || 'Login failed');
-        setTimeout(() => setMessage(""), 2200);
+        setTimeout(() => setMessage(""), 2000);
       }
-
-    } catch (error) {
-      console.error("Login error:", error);
+    } catch (err) {
+      console.error(err);
       setSuccess(false);
       setMessage("Something went wrong");
-      setTimeout(() => setMessage(""), 2200);
+      setTimeout(() => setMessage(""), 2000);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
-
-      {/* ⭐ Custom Event UI Message */}
       {message && (
-        <div
-          className={`fixed left-1/2 transform -translate-x-1/2 top-8 px-6 py-3 rounded-xl shadow-lg text-white text-lg font-semibold animate-fade-in z-50
-            ${success ? "bg-green-600" : "bg-red-600"}`}
-        >
+        <div className={`fixed left-1/2 -translate-x-1/2 top-8 px-6 py-3 rounded-xl shadow-lg text-white text-lg font-semibold animate-fade-in z-50 ${success ? "bg-green-600" : "bg-red-600"}`}>
           {message}
         </div>
       )}
 
       <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center text-green-600">Guard Login</h2>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-          <div>
-            <input
-              type="text"
-              placeholder="Guard ID"
-              {...register('guardId', { required: true })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none"
-            />
-            {errors.guardId && (
-              <p className="text-sm text-red-500 mt-1">Guard ID is required</p>
-            )}
-          </div>
-
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              {...register('password', { required: true })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none"
-            />
-            {errors.password && (
-              <p className="text-sm text-red-500 mt-1">Password is required</p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
-          >
-            Login
-          </button>
+          <input type="text" placeholder="Guard ID" {...register('guardId', { required: true })} className="w-full px-4 py-2 border rounded-md" />
+          {errors.guardId && <p className="text-sm text-red-500">Guard ID is required</p>}
+          <input type="password" placeholder="Password" {...register('password', { required: true })} className="w-full px-4 py-2 border rounded-md" />
+          {errors.password && <p className="text-sm text-red-500">Password is required</p>}
+          <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Login</button>
         </form>
-
-        <div className="mt-4 text-center space-y-2">
-          <p className="text-sm">
-            New User?{' '}
-            <span
-              onClick={() => navigate('/register-as-guard')}
-              className="text-green-600 hover:underline font-medium cursor-pointer"
-            >
-              Register Now
-            </span>
-          </p>
-        </div>
-
       </div>
     </div>
   );

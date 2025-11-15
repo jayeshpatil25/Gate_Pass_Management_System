@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
@@ -11,20 +11,7 @@ function StudentLogin() {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // ⭐ LISTEN FOR LOGOUT EVENT → Show Goodbye message
-  useEffect(() => {
-    const handleLogoutEvent = (e) => {
-      const name = e.detail.username;
-      setSuccess(true);
-      setMessage(`Goodbye ${name}!`);
-      setTimeout(() => setMessage(""), 2000);
-    };
-
-    window.addEventListener("logout-event", handleLogoutEvent);
-    return () => window.removeEventListener("logout-event", handleLogoutEvent);
-  }, []);
-
-  // ⭐ LOGIN → Show Hello message
+  // Login -> dispatch login-event and show Hello, then navigate
   const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:3000/student/login', {
@@ -32,26 +19,34 @@ function StudentLogin() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-
       const result = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('studentId', result.studentId);
+        const uname = result.studentId;
+        // persist credentials
+        localStorage.setItem('studentId', uname);
         localStorage.setItem('studentToken', result.token);
-        localStorage.setItem('username', result.studentId);
+        localStorage.setItem('username', uname);
 
+        // dispatch custom login event (for dashboard listener)
+        window.dispatchEvent(new CustomEvent('login-event', { detail: { username: uname } }));
+
+        // also show Hello here briefly
         setSuccess(true);
-        setMessage(`Hello ${result.studentId}!`);
+        setMessage(`Hello ${uname}!`);
 
+        // navigate after short delay so message is visible and event can be processed
         setTimeout(() => {
+          setMessage("");
           navigate('/student-dashboard');
-        }, 1800);
+        }, 1200);
       } else {
         setSuccess(false);
         setMessage(result.error || 'Login failed');
         setTimeout(() => setMessage(""), 2000);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       setSuccess(false);
       setMessage("Something went wrong");
       setTimeout(() => setMessage(""), 2000);
@@ -60,10 +55,9 @@ function StudentLogin() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
-
       {message && (
         <div className={`fixed left-1/2 -translate-x-1/2 top-8 px-6 py-3 rounded-xl shadow-lg text-white text-lg font-semibold animate-fade-in z-50
-        ${success ? "bg-green-600" : "bg-red-600"}`}>
+          ${success ? "bg-green-600" : "bg-red-600"}`}>
           {message}
         </div>
       )}
@@ -72,25 +66,15 @@ function StudentLogin() {
         <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Student Login</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Student ID"
-            {...register('studentId', { required: true })}
-            className="w-full px-4 py-2 border rounded-md"
-          />
+          <input type="text" placeholder="Student ID" {...register('studentId', { required: true })}
+            className="w-full px-4 py-2 border rounded-md" />
           {errors.studentId && <p className="text-sm text-red-500">Student ID is required</p>}
 
-          <input
-            type="password"
-            placeholder="Password"
-            {...register('password', { required: true })}
-            className="w-full px-4 py-2 border rounded-md"
-          />
+          <input type="password" placeholder="Password" {...register('password', { required: true })}
+            className="w-full px-4 py-2 border rounded-md" />
           {errors.password && <p className="text-sm text-red-500">Password is required</p>}
 
-          <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
-            Login
-          </button>
+          <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Login</button>
         </form>
 
         <p className="mt-4 text-center text-sm">

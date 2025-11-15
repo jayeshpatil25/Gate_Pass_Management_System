@@ -1,73 +1,88 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import '../index.css'; // Ensure you have Tailwind CSS set up in your project
-import '../App.css'; // Ensure you have Tailwind CSS set up in your project
-function GuardRegister() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const navigate = useNavigate();
+import React from "react";
+import { withNavigation, withForm } from "./HOCs";
 
-  const onSubmit = async (data) => {
+class GuardRegister extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  async onSubmit(data) {
+    const { navigate } = this.props;
+
     try {
-      const response = await fetch('http://localhost:3000/guards/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+      const response = await fetch("http://localhost:3000/guard/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        alert('Registration successful');
-        navigate('/Guard-login'); // Redirect to login page
+        alert("Guard registered successfully!");
+        navigate("/guard-login");
       } else {
-        alert(result.error || 'Registration failed');
+        alert(result.error || "Registration failed.");
       }
     } catch (error) {
-      console.error("Error during registration:", error);
-      alert("Something went wrong. Try again.");
+      console.error(error);
+      alert("Something went wrong. Try again later.");
     }
-  };
+  }
 
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-green-100">
-      <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-green-700 mb-6">Guard Registration</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
+  render() {
+    const { form } = this.props;
+    const { register, handleSubmit, formState: { errors } } = form;
+
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <form
+          onSubmit={handleSubmit(this.onSubmit)}
+          className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
+        >
+          <h2 className="text-2xl font-bold text-center mb-6">Guard Register</h2>
+
+          <div className="mb-4">
+            <label>Name</label>
             <input
               type="text"
-              placeholder="Guard ID"
-              {...register('guardId', { required: true })}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              {...register("name", { required: true })}
+              className="w-full p-3 border rounded-lg"
             />
-            {errors.guardId && <p className="text-sm text-red-500 mt-1">Guard ID is required</p>}
+            {errors.name && <p className="text-red-500 text-sm">Name is required</p>}
           </div>
-          <div>
+
+          <div className="mb-4">
+            <label>Email</label>
+            <input
+              type="email"
+              {...register("email", { required: true })}
+              className="w-full p-3 border rounded-lg"
+            />
+            {errors.email && <p className="text-red-500 text-sm">Email is required</p>}
+          </div>
+
+          <div className="mb-4">
+            <label>Password</label>
             <input
               type="password"
-              placeholder="Password"
-              {...register('password', { required: true })}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              {...register("password", { required: true })}
+              className="w-full p-3 border rounded-lg"
             />
-            {errors.password && <p className="text-sm text-red-500 mt-1">Password is required</p>}
+            {errors.password && <p className="text-red-500 text-sm">Password is required</p>}
           </div>
+
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+            className="bg-indigo-600 text-white w-full py-3 rounded-xl mt-4"
           >
             Register
           </button>
         </form>
-        <p className="text-center mt-4 text-sm">
-          Already have an account?{' '}
-          <a href="/Guard-login" className="text-green-600 hover:underline">
-            Login here
-          </a>
-        </p>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default GuardRegister;
+export default withNavigation(withForm(GuardRegister));

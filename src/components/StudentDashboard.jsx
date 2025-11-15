@@ -7,6 +7,7 @@ import '../App.css';
 function StudentDashboard() {
   const [username, setUsername] = useState('');
   const [gatepassRequests, setGatepassRequests] = useState([]);
+  const [localMessage, setLocalMessage] = useState("");   // ⭐ Goodbye message
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,26 +34,35 @@ function StudentDashboard() {
       })
       .catch((err) => {
         console.error('Error fetching gatepass requests:', err);
-        alert("Something went wrong or your session expired. Please login again.");
+        alert("Session expired. Please login again.");
         navigate('/student-login');
       });
   }, [navigate]);
 
-  // Updated logout: set logoutMessage then clear credentials and redirect
+  // ⭐ FINAL WORKING LOGOUT — Goodbye + Custom Event
   const handleLogout = () => {
     const uname = localStorage.getItem("username") || localStorage.getItem("studentId");
-    if (uname) {
-      localStorage.setItem("logoutMessage", `Goodbye ${uname}!`);
-    }
 
+    // ⭐ Show goodbye on THIS screen
+    setLocalMessage(`Goodbye ${uname}!`);
+
+    // ⭐ Fire custom event for IWP requirement
+    window.dispatchEvent(new CustomEvent("logout-event", { 
+      detail: { username: uname } 
+    }));
+
+    // Clear session
     localStorage.removeItem('studentId');
     localStorage.removeItem('studentToken');
     localStorage.removeItem('username');
 
-    navigate('/student-login');
+    // ⭐ Delay navigation so message is visible
+    setTimeout(() => {
+      navigate("/student-login");
+    }, 1500);
   };
 
-  // 🗑️ DELETE Feature — delete a request
+  // 🗑 Delete a request
   const handleDelete = async (id) => {
     const token = localStorage.getItem('studentToken');
     if (!window.confirm('Are you sure you want to delete this gatepass request?')) return;
@@ -60,15 +70,12 @@ function StudentDashboard() {
     try {
       const res = await fetch(`http://localhost:3000/student/requests/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
       if (res.ok) {
         alert('Gatepass request deleted successfully.');
-        // Update frontend list
         setGatepassRequests((prev) => prev.filter((req) => req._id !== id));
       } else {
         alert(data.error || 'Failed to delete request.');
@@ -81,6 +88,14 @@ function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-slate-100 to-blue-100 flex flex-col items-center justify-center p-6 font-sans">
+
+      {/* ⭐ Goodbye message box */}
+      {localMessage && (
+        <div className="fixed left-1/2 -translate-x-1/2 top-8 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg text-lg font-semibold animate-fade-in z-50">
+          {localMessage}
+        </div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -113,6 +128,7 @@ function StudentDashboard() {
 
         <div className="text-left w-full">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Your Requests</h2>
+
           <div className="space-y-4">
             {gatepassRequests.length === 0 ? (
               <p className="text-gray-500">No gatepass requests found.</p>
@@ -146,13 +162,12 @@ function StudentDashboard() {
                       {request.status}
                     </span>
 
-                    {/* 🗑️ Delete Button */}
+                    {/* Delete */}
                     <button
                       onClick={() => handleDelete(request._id)}
                       className="text-red-600 hover:text-red-800 font-bold text-lg"
-                      title="Delete Request"
                     >
-                      🗑️
+                      🗑
                     </button>
                   </div>
                 </motion.div>

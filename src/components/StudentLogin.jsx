@@ -11,18 +11,20 @@ function StudentLogin() {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Show "Goodbye <username>" if logout set it
+  // ⭐ LISTEN FOR LOGOUT EVENT → Show Goodbye message
   useEffect(() => {
-    const msg = localStorage.getItem("logoutMessage");
-    if (msg) {
+    const handleLogoutEvent = (e) => {
+      const name = e.detail.username;
       setSuccess(true);
-      setMessage(msg);
-      localStorage.removeItem("logoutMessage");
-      // auto-hide after short time (optional)
+      setMessage(`Goodbye ${name}!`);
       setTimeout(() => setMessage(""), 2000);
-    }
+    };
+
+    window.addEventListener("logout-event", handleLogoutEvent);
+    return () => window.removeEventListener("logout-event", handleLogoutEvent);
   }, []);
 
+  // ⭐ LOGIN → Show Hello message
   const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:3000/student/login', {
@@ -34,42 +36,34 @@ function StudentLogin() {
       const result = await response.json();
 
       if (response.ok) {
-        // Save ID + token + username
         localStorage.setItem('studentId', result.studentId);
         localStorage.setItem('studentToken', result.token);
         localStorage.setItem('username', result.studentId);
 
-        // Show Hello message (top-center)
         setSuccess(true);
         setMessage(`Hello ${result.studentId}!`);
 
-        // After 1.8s redirect to dashboard
         setTimeout(() => {
-          setMessage("");
           navigate('/student-dashboard');
         }, 1800);
       } else {
         setSuccess(false);
         setMessage(result.error || 'Login failed');
-        setTimeout(() => setMessage(""), 2200);
+        setTimeout(() => setMessage(""), 2000);
       }
     } catch (error) {
-      console.error("Error during login:", error);
       setSuccess(false);
-      setMessage("Something went wrong. Try again.");
-      setTimeout(() => setMessage(""), 2200);
+      setMessage("Something went wrong");
+      setTimeout(() => setMessage(""), 2000);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
 
-      {/* top-center floating message */}
       {message && (
-        <div
-          className={`fixed left-1/2 transform -translate-x-1/2 top-8 px-6 py-3 rounded-xl shadow-lg text-white text-lg font-semibold animate-fade-in z-50
-            ${success ? "bg-green-600" : "bg-red-600"}`}
-        >
+        <div className={`fixed left-1/2 -translate-x-1/2 top-8 px-6 py-3 rounded-xl shadow-lg text-white text-lg font-semibold animate-fade-in z-50
+        ${success ? "bg-green-600" : "bg-red-600"}`}>
           {message}
         </div>
       )}
@@ -78,50 +72,33 @@ function StudentLogin() {
         <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Student Login</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Student ID"
+            {...register('studentId', { required: true })}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+          {errors.studentId && <p className="text-sm text-red-500">Student ID is required</p>}
 
-          <div>
-            <input
-              type="text"
-              placeholder="Student ID"
-              {...register('studentId', { required: true })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            {errors.studentId && (
-              <p className="text-sm text-red-500 mt-1">Student ID is required</p>
-            )}
-          </div>
+          <input
+            type="password"
+            placeholder="Password"
+            {...register('password', { required: true })}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+          {errors.password && <p className="text-sm text-red-500">Password is required</p>}
 
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              {...register('password', { required: true })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            {errors.password && (
-              <p className="text-sm text-red-500 mt-1">Password is required</p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-          >
+          <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
             Login
           </button>
         </form>
 
-        <div className="mt-4 text-center space-y-2">
-          <p className="text-sm">
-            New User?{' '}
-            <span
-              onClick={() => navigate('/register-as-Student')}
-              className="text-blue-600 hover:underline font-medium cursor-pointer"
-            >
-              Register Now
-            </span>
-          </p>
-        </div>
+        <p className="mt-4 text-center text-sm">
+          New User?{" "}
+          <span className="text-blue-600 cursor-pointer hover:underline" onClick={() => navigate('/register-as-Student')}>
+            Register Now
+          </span>
+        </p>
       </div>
     </div>
   );

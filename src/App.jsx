@@ -7,11 +7,9 @@ import StudentRegister from './components/StudentRegister';
 import GatePassForm from './components/GatePassForm';
 import StudentDashboard from './components/StudentDashboard';
 import GuardRegister from './components/GuardRegister';
-
 import GuardDashboard from './components/GuardDashboard';
-import './App.css'; // Ensure you have Tailwind CSS set up in your project
-import './index.css'; // Ensure you have Tailwind CSS set up in your project
-
+import './App.css';
+import './index.css';
 
 function App() {
   return (
@@ -19,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Box />} />
         <Route path="/student-login" element={<StudentLogin />} />
-        <Route path="/Guard-login" element={<GuardLogin />} />
+        <Route path="/guard-login" element={<GuardLogin />} /> {/* FIXED */}
         <Route path="/register-as-Student" element={<StudentRegister />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} /> 
         <Route path="/register-as-guard" element={<GuardRegister />} />

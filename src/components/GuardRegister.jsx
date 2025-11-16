@@ -8,10 +8,9 @@ class GuardRegister extends React.Component {
   }
 
   async onSubmit(data) {
-    const { navigate } = this.props;
 
     try {
-      const response = await fetch("http://localhost:3000/guard/register", {
+      const response = await fetch("http://localhost:3000/guards/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -21,7 +20,7 @@ class GuardRegister extends React.Component {
 
       if (response.ok) {
         alert("Guard registered successfully!");
-        navigate("/guard-login");
+        this.props.navigate("/guard-login");
       } else {
         alert(result.error || "Registration failed.");
       }
@@ -32,11 +31,12 @@ class GuardRegister extends React.Component {
   }
 
   render() {
-    const { form } = this.props;
+    const { form, navigate } = this.props;
     const { register, handleSubmit, formState: { errors } } = form;
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 px-4">
+
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative px-4">
         <form
           onSubmit={handleSubmit(this.onSubmit)}
           className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-lg border border-green-100"
@@ -53,25 +53,14 @@ class GuardRegister extends React.Component {
 
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Name</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Guard ID</label>
               <input
                 type="text"
-                {...register("name", { required: true })}
+                {...register("guardId", { required: true })}
                 className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
-                placeholder="Enter full name"
+                placeholder="Enter Guard ID"
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">Name is required</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Email</label>
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition-colors"
-                placeholder="Enter email address"
-              />
-              {errors.email && <p className="text-red-500 text-sm mt-1">Email is required</p>}
+              {errors.guardId && <p className="text-red-500 text-sm mt-1">Guard ID is required</p>}
             </div>
 
             <div>
@@ -92,6 +81,16 @@ class GuardRegister extends React.Component {
           >
             Register
           </button>
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <span
+              className="text-green-600 cursor-pointer hover:underline font-semibold"
+              onClick={() => navigate('/guard-login')}
+            >
+              Login here
+            </span>
+          </p>
+
         </form>
       </div>
     );

@@ -1,5 +1,7 @@
 import React from "react";
 import { withNavigation, withForm } from "./HOCs";
+import { useNavigate } from 'react-router-dom';
+
 
 class StudentRegister extends React.Component {
   constructor(props) {
@@ -32,7 +34,7 @@ class StudentRegister extends React.Component {
   }
 
   render() {
-    const { form } = this.props;
+    const { form, navigate } = this.props;
     const { register, handleSubmit, formState: { errors } } = form;
 
     return (
@@ -52,16 +54,7 @@ class StudentRegister extends React.Component {
           </div>
 
           <div className="space-y-5">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Name</label>
-              <input
-                type="text"
-                {...register("name", { required: true })}
-                className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
-                placeholder="Enter full name"
-              />
-              {errors.name && <p className="text-red-500 text-sm mt-1">Name is required</p>}
-            </div>
+          
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Student ID</label>
@@ -92,6 +85,16 @@ class StudentRegister extends React.Component {
           >
             Register
           </button>
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <span
+            className="text-blue-600 cursor-pointer hover:underline font-semibold"
+            onClick={() => navigate('/student-login')}
+          >
+            Login here
+          </span>
+        </p>
         </form>
       </div>
     );

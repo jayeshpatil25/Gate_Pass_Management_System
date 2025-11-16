@@ -49,6 +49,7 @@ function Box() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -17,7 +17,7 @@ function Box() {
               </svg>
             </div>
             <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-              Gatepass Management
+              Gatepass Management System
             </h1>
             <p className="text-gray-600 text-lg">Secure and Efficient Access Control</p>
           </div>

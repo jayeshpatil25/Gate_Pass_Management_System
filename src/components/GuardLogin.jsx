@@ -58,6 +58,17 @@ function GuardLogin() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative px-4">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="fixed top-6 left-6 flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 z-50"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back
+      </button>
+
       {message && (
         <div className={`fixed left-1/2 -translate-x-1/2 top-8 px-8 py-4 rounded-2xl shadow-2xl text-white text-lg font-semibold animate-fade-in z-50 ${success ? "bg-gradient-to-r from-green-600 to-green-700 border border-green-400" : "bg-gradient-to-r from-red-500 to-red-600 border border-red-400"}`}>
           {message}

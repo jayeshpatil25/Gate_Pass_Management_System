@@ -2,6 +2,7 @@ import React from "react";
 import '../index.css';
 import '../App.css';
 import { withNavigation, withForm } from "./HOCs";
+import Footer from './Footer';
 
 class GatePassForm extends React.Component {
   constructor(props) {
@@ -158,6 +159,7 @@ class GatePassForm extends React.Component {
             </button>
           </div>
         </form>
+        <Footer />
       </div>
     );
   }

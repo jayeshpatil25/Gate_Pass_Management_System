@@ -1,5 +1,6 @@
 import React from "react";
 import { withNavigation, withForm } from "./HOCs";
+import Footer from './Footer';
 
 class GuardRegister extends React.Component {
   constructor(props) {
@@ -90,8 +91,9 @@ class GuardRegister extends React.Component {
               Login here
             </span>
           </p>
-
+          
         </form>
+        <Footer />
       </div>
     );
   }

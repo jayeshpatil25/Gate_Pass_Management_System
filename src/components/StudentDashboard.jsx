@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
@@ -9,6 +9,8 @@ function StudentDashboard() {
   const [gatepassRequests, setGatepassRequests] = useState([]);
   const [localMessage, setLocalMessage] = useState("");
   const navigate = useNavigate();
+  const goodbyeRef = useRef(null);
+
 
   useEffect(() => {
     const storedId = localStorage.getItem('studentId');

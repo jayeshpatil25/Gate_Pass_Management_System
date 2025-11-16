@@ -64,14 +64,14 @@ class StudentRegister extends React.Component {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Email</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Student ID</label>
               <input
-                type="email"
-                {...register("email", { required: true })}
+                type="text"
+                {...register("studentId", { required: true })}
                 className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
-                placeholder="Enter email address"
+                placeholder="Enter student ID"
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">Email is required</p>}
+              {errors.studentId && <p className="text-red-500 text-sm mt-1">Student ID is required</p>}
             </div>
 
             <div>
@@ -83,17 +83,6 @@ class StudentRegister extends React.Component {
                 placeholder="Create a strong password"
               />
               {errors.password && <p className="text-red-500 text-sm mt-1">Password is required</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Registration Number</label>
-              <input
-                type="text"
-                {...register("regNo", { required: true })}
-                className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
-                placeholder="Enter registration number"
-              />
-              {errors.regNo && <p className="text-red-500 text-sm mt-1">Registration number is required</p>}
             </div>
           </div>
 

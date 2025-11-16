@@ -113,6 +113,13 @@ function GuardLogin() {
             Login
           </button>
         </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          New User?{" "}
+          <span className="text-green-600 cursor-pointer hover:underline font-semibold" onClick={() => navigate('/register-as-Guard')}>
+            Register Now
+          </span>
+        </p>
       </div>
     </div>
   );

@@ -102,13 +102,22 @@ class GatePassForm extends React.Component {
               </div>
 
               <div>
-                <label className="block font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">Date of Journey</label>
+                <label className="block font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">
+                  Date of Journey
+                </label>
+
                 <input
                   type="date"
                   {...register("date", { required: true })}
+                  min={new Date().toISOString().split("T")[0]}
+                  max={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                   className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
                 />
-                {errors.date && <p className="text-red-500 text-sm mt-1">Date is required</p>}
+
+                {errors.date && (
+                  <p className="text-red-500 text-sm mt-1">Date is required</p>
+                )}
+
               </div>
 
               <div>

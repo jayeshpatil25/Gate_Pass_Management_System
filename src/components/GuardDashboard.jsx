@@ -21,11 +21,20 @@ function GuardDashboard() {
     setUsername(storedId);
     fetchRequests(token);
 
-    setLocalMessage(`Hello ${storedId}!`);
-    setMessageType("success");
+    // 🔥 Show "Hello" message only once after login
+    const hasShownWelcome = localStorage.getItem("guardWelcomeShown");
 
-    setTimeout(() => setLocalMessage(""), 2000);
+    if (!hasShownWelcome) {
+      setLocalMessage(`Hello ${storedId}!`);
+      setMessageType("success");
+
+      setTimeout(() => setLocalMessage(""), 2000);
+
+      localStorage.setItem("guardWelcomeShown", "true"); // mark as shown
+    }
+
   }, []);
+
 
   const fetchRequests = async (token) => {
     try {
@@ -132,6 +141,7 @@ function GuardDashboard() {
             onClick={() => {
               localStorage.removeItem("guardToken");
               localStorage.removeItem("guardId");
+              localStorage.removeItem("guardWelcomeShown");
               navigate("/guard-login");
             }}
             className="absolute top-6 right-6 bg-red-500 text-white px-5 py-2 rounded-xl text-sm shadow hover:bg-red-600"

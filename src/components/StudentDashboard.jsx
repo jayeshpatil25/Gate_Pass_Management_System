@@ -19,6 +19,17 @@ function StudentDashboard() {
 
     setUsername(storedId);
 
+    // ❗ Show Hello message only ONCE after login
+    const hasShownWelcome = localStorage.getItem("welcomeShown");
+
+    if (!hasShownWelcome) {
+      setLocalMessage(`Hello ${storedId}!`);
+      setTimeout(() => setLocalMessage(""), 1400);
+
+      localStorage.setItem("welcomeShown", "true");
+    }
+
+    // Fetch requests
     fetch(`http://localhost:3000/student/requests`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
@@ -30,9 +41,8 @@ function StudentDashboard() {
         navigate('/student-login');
       });
 
-    setLocalMessage(`Hello ${storedId}!`);
-    setTimeout(() => setLocalMessage(""), 1400);
   }, [navigate]);
+
 
   const handleLogout = () => {
     const uname = localStorage.getItem("username") || localStorage.getItem("studentId");
@@ -41,6 +51,7 @@ function StudentDashboard() {
     localStorage.removeItem('studentId');
     localStorage.removeItem('studentToken');
     localStorage.removeItem('username');
+    localStorage.removeItem("welcomeShown");
 
     setTimeout(() => navigate('/student-login'), 1400);
   };
@@ -80,15 +91,15 @@ function StudentDashboard() {
       {/* MAIN CONTENT */}
       <div className="flex-grow flex flex-col items-center justify-center p-6 font-sans">
 
-        <motion.div 
-          initial={{ opacity: 0, y: -30 }} 
-          animate={{ opacity: 1, y: 0 }} 
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-5xl relative border border-blue-100">
 
           {/* Logout */}
-          <button 
-            onClick={handleLogout} 
+          <button
+            onClick={handleLogout}
             className="absolute top-6 right-6 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg transition-all duration-300">
             Logout
           </button>
@@ -108,8 +119,8 @@ function StudentDashboard() {
           </div>
 
           {/* Create Request Button */}
-          <motion.button 
-            whileHover={{ scale: 1.05 }} 
+          <motion.button
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/gatepass-form')}
             className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3.5 rounded-xl font-semibold mb-8 shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 mx-auto block">
@@ -139,7 +150,7 @@ function StudentDashboard() {
                 </div>
               ) : (
                 gatepassRequests.map(request => (
-                  <motion.div 
+                  <motion.div
                     key={request._id}
                     className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-md border border-blue-100 hover:shadow-lg transition-all duration-300"
                     whileHover={{ scale: 1.01 }}>
@@ -175,13 +186,12 @@ function StudentDashboard() {
                       {/* RIGHT SIDE — STATUS + DELETE */}
                       <div className="flex items-center gap-3">
 
-                        <span className={`px-5 py-2 rounded-xl text-sm font-bold shadow-md ${
-                          request.status === 'Approved'
+                        <span className={`px-5 py-2 rounded-xl text-sm font-bold shadow-md ${request.status === 'Approved'
                             ? 'bg-green-100 text-green-800 border border-green-300'
                             : request.status === 'Rejected'
-                            ? 'bg-red-100 text-red-800 border border-red-300'
-                            : 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-                        }`}>
+                              ? 'bg-red-100 text-red-800 border border-red-300'
+                              : 'bg-yellow-100 text-yellow-800 border border-yellow-300'
+                          }`}>
                           {request.status}
                         </span>
 

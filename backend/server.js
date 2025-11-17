@@ -1,10 +1,8 @@
-// AT THE VERY TOP - This loads .env variables before anything else
+// Load environment variables first
 import 'dotenv/config';
 
-// All other imports go AFTER
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
 
 import studentRoutes from '../routes/student.js';
 import guardRoutes from '../routes/guard.js';
@@ -12,7 +10,6 @@ import guardRoutes from '../routes/guard.js';
 import studentConnection from '../db/studentDB.js';
 import guardConnection from '../db/guardDB.js';
 import gatepassConnection from '../db/gatepassDB.js';
-import getDatabaseModel from '../models/Gatepass.js';
 
 const app = express();
 app.use(cors());
@@ -22,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    // Wait for all database connections (use 'connected' event to match DB modules)
+    // Wait for DB connections
     await Promise.all([
       new Promise((resolve, reject) => {
         studentConnection.once('connected', resolve);
@@ -44,25 +41,11 @@ const startServer = async () => {
     app.use('/student', studentRoutes);
     app.use('/guards', guardRoutes);
 
-    // Gatepass model and approval route
-    const GatePass = getDatabaseModel(gatepassConnection);
-
-    app.patch('/requests/:id', async (req, res) => {
-      try {
-        const updated = await GatePass.findByIdAndUpdate(req.params.id, { status: 'Approved' });
-        res.status(200).json({ message: 'Request approved' });
-      } catch (err) {
-        console.error("Error updating request:", err);
-        res.status(500).json({ error: 'Internal server error' });
-      }
-    });
-
     // Catch-all 404
     app.use((req, res) => {
       res.status(404).json({ error: 'Route not found' });
     });
 
-    // Start server
     app.listen(PORT, () => {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });

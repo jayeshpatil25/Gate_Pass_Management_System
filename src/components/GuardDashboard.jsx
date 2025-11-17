@@ -59,7 +59,7 @@ function GuardDashboard() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/guards/requests/${requestId}/approve`,
+        `http://localhost:3000/guards/approve/${requestId}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -80,7 +80,7 @@ function GuardDashboard() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/guards/requests/${requestId}/reject`,
+        `http://localhost:3000/guards/reject/${requestId}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -194,16 +194,31 @@ function GuardDashboard() {
                       {/* LEFT */}
                       <div>
                         <h3 className="font-semibold text-lg text-gray-800 mb-1">
-                          {req.studentName || "Student"}
+                          {req.name}
                         </h3>
+
                         <p className="text-gray-600 text-sm">
                           <span className="font-semibold">Date:</span> {new Date(req.date).toDateString()}
                         </p>
+
                         <p className="text-gray-600 text-sm">
                           <span className="font-semibold">Purpose:</span> {req.purpose}
                         </p>
+
                         <p className="text-gray-600 text-sm">
                           <span className="font-semibold">Destination:</span> {req.destination}
+                        </p>
+
+                        <p className="text-gray-600 text-sm">
+                          <span className="font-semibold">Hostel Block:</span> {req.hostelBlock}
+                        </p>
+
+                        <p className="text-gray-600 text-sm">
+                          <span className="font-semibold">Time:</span> {req.time}
+                        </p>
+
+                        <p className="text-gray-600 text-sm">
+                          <span className="font-semibold">Luggages:</span> {req.luggages}
                         </p>
                       </div>
 

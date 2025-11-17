@@ -8,3 +8,7 @@
 .animate-fade-in {
   animation: fadeIn 260ms ease-out;
 }
+html, body {
+  overflow-x: hidden;
+}
+

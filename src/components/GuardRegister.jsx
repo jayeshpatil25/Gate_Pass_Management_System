@@ -38,7 +38,6 @@ class GuardRegister extends React.Component {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
 
-        {/* Centered Content */}
         <div className="flex flex-1 items-center justify-center px-4">
           <form
             onSubmit={handleSubmit(this.onSubmit)}
@@ -97,7 +96,6 @@ class GuardRegister extends React.Component {
           </form>
         </div>
 
-        {/* Sticky Footer at Bottom */}
         <Footer />
       </div>
     );

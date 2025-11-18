@@ -13,7 +13,7 @@ const GatePass = getDatabaseModel(databaseConnection);
 
 const router = express.Router();
 
-// ✅ PUBLIC: Register
+
 router.post('/register', async (req, res) => {
   const { studentId, password } = req.body;
   try {
@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ PUBLIC: Login and Issue JWT
+
 router.post('/login', async (req, res) => {
   const { studentId, password } = req.body;
   try {
@@ -56,7 +56,7 @@ router.post('/login', async (req, res) => {
    res.status(200).json({
   message: 'Login successful',
   token,
-  studentId: student.studentId  // ✅ send this!
+  studentId: student.studentId  
 });
 
   } catch (err) {
@@ -65,10 +65,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// 🔒 Apply Authentication Middleware Globally Below This Line
+
 router.use(authenticateJWT);
 
-// ✅ PROTECTED: Submit Gatepass
+
 router.post('/form', async (req, res) => {
   const {
     name,
@@ -81,7 +81,7 @@ router.post('/form', async (req, res) => {
     status = 'Pending'
   } = req.body;
 
-  const studentId = req.user.studentId; // Extracted from JWT
+  const studentId = req.user.studentId; 
 
   try {
     const student = await Student.findOne({ studentId });
@@ -115,7 +115,7 @@ router.post('/form', async (req, res) => {
   }
 });
 
-// ✅ PROTECTED: View Gatepass Requests
+
 router.get('/requests', async (req, res) => {
   const studentId = req.user.studentId;
 
@@ -128,9 +128,9 @@ router.get('/requests', async (req, res) => {
   }
 });
 
-// ✅ PROTECTED: Delete a Gatepass Request
+
 router.delete('/requests/:id', async (req, res) => {
-  const studentId = req.user.studentId; // from JWT
+  const studentId = req.user.studentId;
   const { id } = req.params;
 
   try {

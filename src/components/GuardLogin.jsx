@@ -59,11 +59,7 @@ function GuardLogin() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative px-4">
-
-      {/* MAIN CENTERED CONTENT */}
       <div className="flex-grow flex items-center justify-center">
-
-        {/* Back Button */}
         <button
           onClick={() => navigate('/')}
           className="fixed top-6 left-6 flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 z-50"
@@ -126,10 +122,8 @@ function GuardLogin() {
             </span>
           </p>
         </div>
-
       </div>
 
-      {/* FOOTER ALWAYS AT BOTTOM */}
       <Footer />
     </div>
   );

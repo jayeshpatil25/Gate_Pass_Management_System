@@ -10,7 +10,6 @@ function Box() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-green-50 px-4">
 
-      {/* Centered main content */}
       <div className="flex-grow flex items-center justify-center">
         <div className="outerbox">
           <div className="bg-white rounded-2xl shadow-2xl p-12 w-full max-w-xl border border-gray-100">
@@ -55,7 +54,6 @@ function Box() {
         </div>
       </div>
 
-      {/* Footer stays at the bottom */}
       <Footer />
     </div>
   );

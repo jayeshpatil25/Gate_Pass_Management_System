@@ -56,7 +56,6 @@ class GatePassForm extends React.Component {
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100">
 
 
-        {/* Centered Form Wrapper */}
         <div className="flex-grow flex items-center justify-center p-4">
 
           <form
@@ -175,7 +174,6 @@ class GatePassForm extends React.Component {
           </form>
         </div>
 
-        {/* Full-width footer */}
         <Footer />
       </div>
     );

@@ -39,7 +39,6 @@ class StudentRegister extends React.Component {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-100 px-4">
 
-        {/* MAIN CENTERED CONTENT */}
         <div className="flex-grow flex items-center justify-center">
           <form
             onSubmit={handleSubmit(this.onSubmit)}
@@ -102,7 +101,6 @@ class StudentRegister extends React.Component {
           </form>
         </div>
 
-        {/* FOOTER AT BOTTOM */}
         <Footer />
       </div>
     );

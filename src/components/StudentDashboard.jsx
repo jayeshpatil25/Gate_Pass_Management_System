@@ -19,7 +19,6 @@ function StudentDashboard() {
 
     setUsername(storedId);
 
-    // ❗ Show Hello message only ONCE after login
     const hasShownWelcome = localStorage.getItem("welcomeShown");
 
     if (!hasShownWelcome) {
@@ -81,14 +80,12 @@ function StudentDashboard() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-100">
 
-      {/* Floating Hello/Goodbye Message */}
       {localMessage && (
         <div className="fixed left-1/2 -translate-x-1/2 top-8 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl shadow-2xl text-lg font-semibold animate-fade-in z-50 border border-blue-400">
           {localMessage}
         </div>
       )}
 
-      {/* MAIN CONTENT */}
       <div className="flex-grow flex flex-col items-center justify-center p-6 font-sans">
 
         <motion.div
@@ -97,14 +94,12 @@ function StudentDashboard() {
           transition={{ duration: 0.6 }}
           className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-5xl relative border border-blue-100">
 
-          {/* Logout */}
           <button
             onClick={handleLogout}
             className="absolute top-6 right-6 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg transition-all duration-300">
             Logout
           </button>
 
-          {/* Dashboard Header */}
           <div className="text-center mb-8">
             <div className="inline-block p-4 bg-blue-100 rounded-2xl mb-4">
               <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +113,6 @@ function StudentDashboard() {
             <p className="text-gray-500 mt-1">Manage your gatepass requests efficiently</p>
           </div>
 
-          {/* Create Request Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -132,7 +126,6 @@ function StudentDashboard() {
             </div>
           </motion.button>
 
-          {/* Request List */}
           <div className="text-left w-full">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-1 w-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full"></div>
@@ -140,7 +133,6 @@ function StudentDashboard() {
             </div>
 
             <div className="space-y-4">
-              {/* No Requests */}
               {gatepassRequests.length === 0 ? (
                 <div className="text-center py-12 bg-blue-50 rounded-2xl border-2 border-dashed border-blue-200">
                   <svg className="w-16 h-16 text-blue-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,15 +147,13 @@ function StudentDashboard() {
                     className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-md border border-blue-100 hover:shadow-lg transition-all duration-300"
                     whileHover={{ scale: 1.01 }}>
 
-                    {/* REQUEST CARD FIXED RESPONSIVE */}
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
 
-                      {/* LEFT SIDE */}
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="p-2 bg-blue-200 rounded-lg">
                             <svg className="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
                           <p className="font-bold text-lg text-gray-800">
@@ -183,7 +173,6 @@ function StudentDashboard() {
                         </div>
                       </div>
 
-                      {/* RIGHT SIDE — STATUS + DELETE */}
                       <div className="flex items-center gap-3">
 
                         <span className={`px-5 py-2 rounded-xl text-sm font-bold shadow-md ${request.status === 'Approved'
@@ -216,7 +205,6 @@ function StudentDashboard() {
         </motion.div>
       </div>
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );

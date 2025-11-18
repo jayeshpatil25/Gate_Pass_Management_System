@@ -1,4 +1,3 @@
-// Load environment variables first
 import 'dotenv/config';
 
 import express from 'express';
@@ -19,7 +18,6 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    // Wait for DB connections
     await Promise.all([
       new Promise((resolve, reject) => {
         studentConnection.once('connected', resolve);

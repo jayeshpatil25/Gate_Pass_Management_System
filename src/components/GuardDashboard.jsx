@@ -21,7 +21,6 @@ function GuardDashboard() {
     setUsername(storedId);
     fetchRequests(token);
 
-    // 🔥 Show "Hello" message only once after login
     const hasShownWelcome = localStorage.getItem("guardWelcomeShown");
 
     if (!hasShownWelcome) {
@@ -30,7 +29,7 @@ function GuardDashboard() {
 
       setTimeout(() => setLocalMessage(""), 2000);
 
-      localStorage.setItem("guardWelcomeShown", "true"); // mark as shown
+      localStorage.setItem("guardWelcomeShown", "true");
     }
 
   }, []);
@@ -113,7 +112,6 @@ function GuardDashboard() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
 
-      {/* Toast Message */}
       <AnimatePresence>
         {localMessage && (
           <motion.div
@@ -127,7 +125,6 @@ function GuardDashboard() {
         )}
       </AnimatePresence>
 
-      {/* MAIN CONTAINER */}
       <div className="flex-grow flex justify-center items-start p-6 pt-24">
 
         <motion.div
@@ -136,7 +133,6 @@ function GuardDashboard() {
           className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-4xl relative border border-green-100"
         >
 
-          {/* Logout */}
           <button
             onClick={() => {
               localStorage.removeItem("guardToken");
@@ -149,7 +145,6 @@ function GuardDashboard() {
             Logout
           </button>
 
-          {/* HEADER */}
           <div className="text-center mb-8">
             <div className="inline-block p-4 bg-green-100 rounded-2xl mb-4">
               <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,7 +157,6 @@ function GuardDashboard() {
             <p className="text-gray-600">ID: {username}</p>
           </div>
 
-          {/* TITLE ROW */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="h-1 w-12 bg-green-600 rounded-full"></div>
@@ -173,14 +167,12 @@ function GuardDashboard() {
             </div>
           </div>
 
-          {/* LOADING */}
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-600 mx-auto"></div>
             </div>
           ) : (
 
-            /* REQUEST LIST */
             <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
 
               {requests.length === 0 ? (
@@ -198,10 +190,8 @@ function GuardDashboard() {
                     className="p-5 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow border border-green-100"
                   >
 
-                    {/* Request Card */}
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 
-                      {/* LEFT */}
                       <div>
                         <h3 className="font-semibold text-lg text-gray-800 mb-1">
                           {req.name}
@@ -232,7 +222,6 @@ function GuardDashboard() {
                         </p>
                       </div>
 
-                      {/* RIGHT BUTTONS */}
                       <div className="flex gap-2">
                         <button
                           disabled={processingId === req._id}

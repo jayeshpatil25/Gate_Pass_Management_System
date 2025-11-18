@@ -52,10 +52,8 @@ function StudentLogin() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-100 relative px-4">
       
-      {/* MAIN CONTENT CENTERED */}
       <div className="flex-grow flex items-center justify-center">
 
-        {/* Back Button */}
         <button
           onClick={() => navigate('/')}
           className="fixed top-6 left-6 flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 z-50"
@@ -122,7 +120,6 @@ function StudentLogin() {
 
       </div>
 
-      {/* FOOTER AT BOTTOM ALWAYS */}
       <Footer />
     </div>
   );

@@ -11,7 +11,7 @@ const gatepassdataSchema = new mongoose.Schema({
     validate: {
       validator: function (value) {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // remove time portion
+        today.setHours(0, 0, 0, 0);
         return value >= today;
       },
       message: "Date must be today or later"

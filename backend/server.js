@@ -1,4 +1,3 @@
-// Load environment variables first
 import 'dotenv/config';
 
 import express from 'express';
@@ -19,7 +18,6 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    // Wait for DB connections
     await Promise.all([
       new Promise((resolve, reject) => {
         studentConnection.once('connected', resolve);
@@ -37,11 +35,9 @@ const startServer = async () => {
 
     console.log('✅ All databases connected successfully.');
 
-    // Mount routes
     app.use('/student', studentRoutes);
     app.use('/guards', guardRoutes);
 
-    // Catch-all 404
     app.use((req, res) => {
       res.status(404).json({ error: 'Route not found' });
     });

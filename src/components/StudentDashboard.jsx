@@ -30,7 +30,7 @@ function StudentDashboard() {
     }
 
     // Fetch requests
-    fetch(`http://localhost:3000/student/requests`, {
+    fetch(`https://gate-pass-management-system-95o7.onrender.com/student/requests`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -61,7 +61,7 @@ function StudentDashboard() {
     if (!confirm('Are you sure?')) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/student/requests/${id}`, {
+      const res = await fetch(`https://gate-pass-management-system-95o7.onrender.com/student/requests/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });

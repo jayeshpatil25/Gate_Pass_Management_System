@@ -11,7 +11,7 @@ class GuardRegister extends React.Component {
   async onSubmit(data) {
 
     try {
-      const response = await fetch("http://localhost:3000/guards/register", {
+      const response = await fetch("https://gate-pass-management-system-95o7.onrender.com/guards/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

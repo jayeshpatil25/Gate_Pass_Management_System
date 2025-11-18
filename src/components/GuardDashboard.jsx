@@ -39,7 +39,7 @@ function GuardDashboard() {
   const fetchRequests = async (token) => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:3000/guards/requests`, {
+      const res = await fetch(`https://gate-pass-management-system-95o7.onrender.com/guards/requests`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -68,7 +68,7 @@ function GuardDashboard() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/guards/approve/${requestId}`,
+        `https://gate-pass-management-system-95o7.onrender.com/guards/approve/${requestId}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -89,7 +89,7 @@ function GuardDashboard() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/guards/reject/${requestId}`,
+        `https://gate-pass-management-system-95o7.onrender.com/guards/reject/${requestId}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
 

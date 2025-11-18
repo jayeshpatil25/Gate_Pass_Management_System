@@ -37,11 +37,11 @@ const startServer = async () => {
 
     console.log('✅ All databases connected successfully.');
 
-    // Mount routes
+   
     app.use('/student', studentRoutes);
     app.use('/guards', guardRoutes);
 
-    // Catch-all 404
+    
     app.use((req, res) => {
       res.status(404).json({ error: 'Route not found' });
     });

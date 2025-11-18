@@ -13,7 +13,7 @@ const GatePass = getDatabaseModel(databaseConnection);
 
 const router = express.Router();
 
-// PUBLIC — Register
+
 router.post('/register', async (req, res) => {
   const { guardId, password } = req.body;
 
@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// PUBLIC — Login
+
 router.post('/login', async (req, res) => {
   const { guardId, password } = req.body;
 
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
 
 router.use(authenticateJWT);
 
-// GET pending requests
+
 router.get('/requests', async (req, res) => {
   if (req.user.role !== 'guard')
     return res.status(403).json({ error: 'Forbidden' });
@@ -72,7 +72,7 @@ router.get('/requests', async (req, res) => {
   }
 });
 
-// APPROVE request
+
 router.post('/approve/:id', async (req, res) => {
   try {
     const updated = await GatePass.findByIdAndUpdate(
@@ -90,7 +90,7 @@ router.post('/approve/:id', async (req, res) => {
   }
 });
 
-// REJECT request
+
 router.post('/reject/:id', async (req, res) => {
   try {
     const updated = await GatePass.findByIdAndUpdate(
